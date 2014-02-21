@@ -6,6 +6,18 @@ An angular directive module that can be used to retrieve images as base64 encodi
 Instructions
 ------------
 
+### [Optional] Install the chrome module using bower
+
+Install using bower install
+
+    bower install infomofo/angular-chrome-image-storage
+
+Add the following script import
+
+```html
+    <script src="bower_components/angular-chrome-image-storage/angular-chrome-image-storage.js"></script>
+```
+
 ### Import the chrome-image-storage module
 
 ```javascript
@@ -24,7 +36,14 @@ Retrieves the specified url as a base64 image, and replaces the element with an 
 ```html
 <stored-img ng-url="http://image-to-store/blah.png"/>
 ```
-Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source, and caches the image for offline access.  This directive will ONLY work in a chrome extension.
+Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source, and caches the image for offline access.  This directive will ONLY work in a chrome extension with ``storage`` permission explicitly requested.
+
+```json
+  "permissions": [
+    "storage",
+    ...
+  ]
+```
 
 ### How it works
 
