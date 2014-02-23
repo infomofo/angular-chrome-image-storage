@@ -8,15 +8,14 @@ angular.module("chrome-image-storage",[])
 		    sourceImage.onload = function() {
 		        // Create a canvas with the desired dimensions
 		        var canvas = document.createElement("canvas");
-		        console.log("maxWidth: " + maxWidth);
 		        var newWidth = Math.min(maxWidth, sourceImage.width);
 		        var newHeight = newWidth * sourceImage.height / sourceImage.width;
 		        canvas.width = newWidth;
 		        canvas.height = newHeight;
 		        // Scale and draw the source image to the canvas
-		        console.log("resizing from " + 
-		        	sourceImage.width + "x" + sourceImage.height + 
-		        	" to " + newWidth + "x" + newHeight);
+		        // console.log("resizing from " + 
+		        // 	sourceImage.width + "x" + sourceImage.height + 
+		        // 	" to " + newWidth + "x" + newHeight);
 		        canvas.getContext("2d").drawImage(sourceImage, 0, 0, newWidth, newHeight);
 
 		        // Convert the canvas to a data URL in PNG format
@@ -35,7 +34,7 @@ angular.module("chrome-image-storage",[])
 			var deferred = $q.defer();
 
 			$http.get(url, {responseType: 'blob'}).success(function(blob) {
-  				console.log('Fetched image via XHR: ' + blob);
+  				// console.log('Fetched image via XHR: ' + blob);
   				var reader = new window.FileReader();
 				reader.readAsDataURL(blob); 
 				reader.onloadend = function() {
