@@ -118,7 +118,7 @@ angular.module("chrome-image-storage",[])
 	        replace: true
 	    }
 	})
-	.directive("chromeStoredImg", function(){
+	.directive("storedImg", function(){
 	    return {
 	        restrict: "E",
 	        scope: {dataSrc: '@ngUrl',

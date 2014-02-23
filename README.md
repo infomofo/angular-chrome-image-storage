@@ -34,7 +34,7 @@ There are three directives supplied by this module.
 Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source.  This directive can be used in any angular application.
 
 ```html
-<chrome-stored-img ng-url="http://image-to-store/blah.png"/>
+<stored-img ng-url="http://image-to-store/blah.png"/>
 ```
 Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source, and caches the image for offline access.  This directive will ONLY work in a chrome extension with ``storage`` permission explicitly requested.
 
