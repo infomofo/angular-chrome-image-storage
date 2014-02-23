@@ -19,7 +19,7 @@ angular.module("chrome-image-storage",[])
 		        canvas.getContext("2d").drawImage(sourceImage, 0, 0, newWidth, newHeight);
 
 		        // Convert the canvas to a data URL in PNG format
-		        callback(canvas.toDataURL());
+		        callback(canvas.toDataURL("image/jpeg",0.8));
 		    }
 
 		    sourceImage.src = url;
