@@ -1,4 +1,4 @@
 TODO
 ====
 
-* Scale down large images before caching them in storage
+* provide mechanisms to clear out local storage

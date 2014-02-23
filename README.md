@@ -1,7 +1,7 @@
 angular-chrome-image-storage
 ============================
 
-An angular directive module that can be used to retrieve images as base64 encodings and cache images in chrome local storage.
+An angular directive module that can be used to retrieve images as base64 encodings and cache images in chrome local storage or html5 storage.
 
 Instructions
 ------------
@@ -26,7 +26,7 @@ angular.module('myapp',['chrome-image-storage']);
 
 ### HTML
 
-There are two directives supplied by this module.
+There are three directives supplied by this module.
 
 ```html
 <base64-img ng-url="http://image-to-store/blah.png"/>
@@ -34,7 +34,7 @@ There are two directives supplied by this module.
 Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source.  This directive can be used in any angular application.
 
 ```html
-<stored-img ng-url="http://image-to-store/blah.png"/>
+<chrome-stored-img ng-url="http://image-to-store/blah.png"/>
 ```
 Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source, and caches the image for offline access.  This directive will ONLY work in a chrome extension with ``storage`` permission explicitly requested.
 
@@ -44,6 +44,11 @@ Retrieves the specified url as a base64 image, and replaces the element with an 
     ...
   ]
 ```
+
+```html
+<html5-stored-img ng-url="http://image-to-store/blah.png"></html5-stored-img>
+```
+Retrieves the specified url as a base64 image, and replaces the element with an image with the base64 png as the source, and caches the image for offline access in html 5 local storage.
 
 ### How it works
 

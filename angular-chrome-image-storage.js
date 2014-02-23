@@ -56,7 +56,7 @@ angular.module("chrome-image-storage",[])
 			getImage: function(url, maxWidth) {
 				return getImage(url, maxWidth);
 			},
-			getStoredImage: function(url, maxWidth) {
+			getChromeLocallyStoredImage: function(url, maxWidth) {
 				var deferred = $q.defer();
 
 				var area = chrome.storage.local; // change this to chrome.storage.sync for sync capabilities
@@ -84,6 +84,22 @@ angular.module("chrome-image-storage",[])
 			        }
 		        });
 				return deferred.promise;
+			},
+			getHtml5StoredImage: function(url, maxWidth) {
+				var deferred = $q.defer();
+				
+				var keyValue = localStorage.getItem(url);
+				if (keyValue != null) {
+					deffered.resolve(keyValue);
+				} else {
+					getImage(url, maxWidth).then(function(data) {
+		        			keyValue = data;
+		        			// console.log("csaveItemaching value for "+ key + " : " + angular.toJson(keyValue));
+		        			localStorage.setItem(url, keyValue);
+		        			deferred.resolve(keyValue);
+		        		});
+				}
+				return deferred.promise;
 			}
 		}
 	})
@@ -102,7 +118,7 @@ angular.module("chrome-image-storage",[])
 	        replace: true
 	    }
 	})
-	.directive("storedImg", function(CSS_CLASSES){
+	.directive("chromeStoredImg", function(){
 	    return {
 	        restrict: "E",
 	        scope: {dataSrc: '@ngUrl',
@@ -110,7 +126,22 @@ angular.module("chrome-image-storage",[])
 	        template: '<img ng-src="{{storedImage}}"/>',
 	        controller: ['$scope', '$timeout', 'chrome-image-storage', '$element',function($scope, $timeout, chromeImageStorage, $element){
 	        	$scope.storedImage = null;
-	        	chromeImageStorage.getStoredImage($scope.dataSrc, $scope.maxWidth).then(function(data) {
+	        	chromeImageStorage.getChromeLocallyStoredImage($scope.dataSrc, $scope.maxWidth).then(function(data) {
+	        		$scope.storedImage = data;
+	        	});
+	        }],
+	        replace: true
+	    }
+	})
+	.directive("html5StoredImg", function(){
+	    return {
+	        restrict: "E",
+	        scope: {dataSrc: '@ngUrl',
+	    			maxWidth: '@maxWidth'},
+	        template: '<img ng-src="{{storedImage}}"/>',
+	        controller: ['$scope', '$timeout', 'chrome-image-storage', '$element',function($scope, $timeout, chromeImageStorage, $element){
+	        	$scope.storedImage = null;
+	        	chromeImageStorage.getHtml5StoredImage($scope.dataSrc, $scope.maxWidth).then(function(data) {
 	        		$scope.storedImage = data;
 	        	});
 	        }],
