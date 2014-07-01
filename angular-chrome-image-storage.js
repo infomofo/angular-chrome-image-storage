@@ -1,5 +1,5 @@
 'use strict';
-
+console.log("test");
 angular.module("chrome-image-storage",[])
 	.factory('chrome-image-storage', function($q, $http){
 
@@ -31,8 +31,8 @@ angular.module("chrome-image-storage",[])
 		        canvas.width = newWidth;
 		        canvas.height = newHeight;
 		        // Scale and draw the source image to the canvas
-		        // console.log("resizing from " + 
-		        // 	sourceImage.width + "x" + sourceImage.height + 
+		        // console.log("resizing from " +
+		        // 	sourceImage.width + "x" + sourceImage.height +
 		        // 	" to " + newWidth + "x" + newHeight);
 		        canvas.getContext("2d").drawImage(sourceImage, 0, 0, newWidth, newHeight);
 
@@ -45,38 +45,41 @@ angular.module("chrome-image-storage",[])
 
 		/**
 		 * A function specifically for retrieving images.
-		 * 
+		 *
 		 * The url is converted into a base64 image
-		 */ 
+		 */
 		var getImage = function(url, maxWidth) {
 			var deferred = $q.defer();
-
-			$http.get(url, {responseType: 'blob'}).success(function(blob) {
-  				// console.log('Fetched image via XHR: ' + blob);
-  				var reader = new window.FileReader();
-				reader.readAsDataURL(blob); 
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', url, true);
+			xhr.responseType = 'blob';
+			xhr.onload = function(e) {
+			  //console.log('Fetched image via XHR: ' + e);
+  			var reader = new window.FileReader();
+				reader.readAsDataURL(this.response);
 				reader.onloadend = function() {
 	                var base64data = reader.result;
 	                if (maxWidth != undefined) {
 		                resizeImage(base64data, maxWidth, function(dataUrl) {
-							deferred.resolve(dataUrl);	                	
+							deferred.resolve(dataUrl);
 		                });
 	            	} else {
 	            		deferred.resolve(base64data);
 	            	}
-				}
-    		});
+				};
+    	};
+			xhr.send();
 			return deferred.promise;
 		}
 
 		/**
 		 * A function for retrieving images and storing in html 5 local storage.
-		 */ 
+		 */
 		var getChromeLocallyStoredImage = function(url, maxWidth) {
 			var deferred = $q.defer();
 
 			var area = chrome.storage.local; // change this to chrome.storage.sync for sync capabilities
-		
+
 	        area.get(url, function(value) {
 	        	var keyValue = value[url];
 	        	if (keyValue == undefined || keyValue == null) {
@@ -104,10 +107,10 @@ angular.module("chrome-image-storage",[])
 
 		/**
 		 * A function for retrieving images and storing in html 5 local storage.
-		 */ 
+		 */
 		var getHtml5StoredImage = function(url, maxWidth) {
 			var deferred = $q.defer();
-			
+
 			var keyValue = localStorage.getItem(url);
 			// console.log("retrieved value for "+ url + " : " + angular.toJson(keyValue));
 			if (keyValue !== null) {
