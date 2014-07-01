@@ -1,5 +1,4 @@
 'use strict';
-console.log("test");
 angular.module("chrome-image-storage",[])
 	.factory('chrome-image-storage', function($q, $http){
 
