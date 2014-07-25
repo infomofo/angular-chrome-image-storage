@@ -53,14 +53,15 @@ angular.module("chrome-image-storage",[])
 			xhr.open('GET', url, true);
 			xhr.responseType = 'blob';
 			xhr.onload = function(e) {
-			  //console.log('Fetched image via XHR: ' + e);
+			  // console.log('Fetched image ' + url + ' via XHR: ' + e);
   			var reader = new window.FileReader();
 				reader.readAsDataURL(this.response);
 				reader.onloadend = function() {
 	                var base64data = reader.result;
 	                if (maxWidth != undefined) {
 		                resizeImage(base64data, maxWidth, function(dataUrl) {
-							deferred.resolve(dataUrl);
+											// console.log('resized as ' + dataUrl);
+											deferred.resolve(dataUrl);
 		                });
 	            	} else {
 	            		deferred.resolve(base64data);
@@ -79,28 +80,30 @@ angular.module("chrome-image-storage",[])
 
 			var area = chrome.storage.local; // change this to chrome.storage.sync for sync capabilities
 
-	        area.get(url, function(value) {
-	        	var keyValue = value[url];
-	        	if (keyValue == undefined || keyValue == null) {
-	        		getImage(url, maxWidth).then(function(data) {
-	        			keyValue = data;
-	        			// console.log("caching value for "+ key + " : " + angular.toJson(keyValue));
-	        			var saveObject = {};
-	        			saveObject[url] = keyValue;
-	        			// cachedImages[url] = keyValue;
-	        			area.set(saveObject, function() {
-	        				if (chrome.runtime.lasterror){
-					            console.error(chrome.runtime.lasterror.message);
-					        } else {
-			    				// console.log('saved ' + keyValue + " to key " + key);
-			    			}
-	        			});
-	        			deferred.resolve(keyValue);
-	        		});
-	        	} else {
-		        	deferred.resolve(keyValue);
-		        }
-	        });
+      area.get(url, function(value) {
+      	var keyValue = value[url];
+				// console.log("retrieved value for "+ url + " : " + angular.toJson(keyValue));
+      	if (keyValue == undefined || keyValue == null) {
+      		getImage(url, maxWidth).then(function(data) {
+      			keyValue = data;
+      			// console.log("caching value for "+ url + " : " + angular.toJson(keyValue));
+      			var saveObject = {};
+      			saveObject[url] = keyValue;
+						// TODO: Add local caching to speed up retrieval
+      			// cachedImages[url] = keyValue;
+      			area.set(saveObject, function() {
+      				if (chrome.runtime.lasterror){
+			            console.error(chrome.runtime.lasterror.message);
+			        } else {
+	    				// console.log('saved ' + keyValue + " to key " + url);
+	    			}
+      			});
+      			deferred.resolve(keyValue);
+      		});
+      	} else {
+        	deferred.resolve(keyValue);
+        }
+      });
 			return deferred.promise;
 		}
 
@@ -132,7 +135,7 @@ angular.module("chrome-image-storage",[])
 			getStoredImage: function(url, maxWidth) {
 				switch (storage_type) {
 					case StorageSupportEnum.CHROME:
-						// console.log ("you're in a chrome app. using chrome local storage.")
+						// console.log ("you're in a chrome app. using chrome local storage.");
 						return getChromeLocallyStoredImage(url, maxWidth);
 						break;
 					case StorageSupportEnum.HTML5:
