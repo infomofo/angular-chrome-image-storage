@@ -86,6 +86,7 @@ angular.module("chrome-image-storage",[])
       	if (keyValue == undefined || keyValue == null) {
       		getImage(url, maxWidth).then(function(data) {
       			keyValue = data;
+      			deferred.resolve(keyValue);
       			// console.log("caching value for "+ url + " : " + angular.toJson(keyValue));
       			var saveObject = {};
       			saveObject[url] = keyValue;
@@ -98,7 +99,6 @@ angular.module("chrome-image-storage",[])
 	    				// console.log('saved ' + keyValue + " to key " + url);
 	    			}
       			});
-      			deferred.resolve(keyValue);
       		});
       	} else {
         	deferred.resolve(keyValue);
