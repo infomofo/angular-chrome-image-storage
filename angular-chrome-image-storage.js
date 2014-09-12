@@ -152,11 +152,17 @@ angular.module("chrome-image-storage",[])
 	.directive("base64Img",function() {
 	    return {
 	        restrict: "E",
-	        scope: {dataSrc: '@ngUrl',
-	    			maxWidth: '@maxWidth'},
+	        scope: {
+	          dataSrc: '@ngUrl',
+	    			maxWidth: '@maxWidth',
+	    			defaultImage: '@defaultImage'
+	    	  },
 	        template: '<img ng-src="{{storedImage}}"/>',
 	        controller: ['$scope', '$timeout', 'chrome-image-storage', '$element',function($scope, $timeout, chromeImageStorage, $element){
 	        	$scope.storedImage = null;
+	        	if (angular.isDefined($scope.defaultImage)) {
+	        	  $scope.storedImage = $scope.defaultImage;
+	        	}
 	        	chromeImageStorage.getImage($scope.dataSrc, $scope.maxWidth).then(function(data) {
 	        		$scope.storedImage = data;
 	        	});
@@ -167,11 +173,17 @@ angular.module("chrome-image-storage",[])
 	.directive("storedImg", function(){
 	    return {
 	        restrict: "E",
-	        scope: {dataSrc: '@ngUrl',
-	    			maxWidth: '@maxWidth'},
+	        scope: {
+	          dataSrc: '@ngUrl',
+	    			maxWidth: '@maxWidth',
+	    			defaultImage: '@defaultImage'
+	    	  },
 	        template: '<img ng-src="{{storedImage}}"/>',
 	        controller: ['$scope', '$timeout', 'chrome-image-storage', '$element',function($scope, $timeout, chromeImageStorage, $element){
 	        	$scope.storedImage = null;
+	        	if (angular.isDefined($scope.defaultImage)) {
+	        	  $scope.storedImage = $scope.defaultImage;
+	        	}
 	        	chromeImageStorage.getStoredImage($scope.dataSrc, $scope.maxWidth).then(function(data) {
 	        		$scope.storedImage = data;
 	        	});
